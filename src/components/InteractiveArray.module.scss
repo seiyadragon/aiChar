@@ -1,0 +1,99 @@
+.interactiveArray {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+  margin-top: 8px;
+  max-height: 317px;
+
+  // SCROLLBARS BABY
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cacaca;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9a9a9a;
+  }
+  
+  .titleSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 32px;
+    border-bottom: solid 1px #e0e0e0;
+    transform: translate(0px, 0px);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .listSection {
+    width: 100%;
+    height: 80%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0px;
+    padding-left: 0px;
+    align-items: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    list-style: none;
+
+    li {
+      margin-top: 1px;
+      margin-bottom: 1px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      border: solid 1px white;
+      width: 90%;
+      margin-left: 0px;
+      background-color: #e0e0e0;
+      transition: all 0.3s ease-in-out;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      * {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-size: 12px;
+        max-width: 80%;
+      }
+    }
+  }
+
+  .actionBar, .actionBar2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 15%;
+    margin-right: 0px;
+    border-top: solid 1px #e0e0e0;
+    max-height: 32px;
+    transform: translate(0px, 0px);
+  
+    button {
+      margin: 2px;
+      padding: 2px;
+      font-size: 12px;
+      height: 28px;
+    }
+  }
+  
+  .actionBar2 {
+    margin-left: 0px;
+  }
+}
