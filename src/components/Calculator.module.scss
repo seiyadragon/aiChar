@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  .display {
+    outline: none;
+    border: none;
+    padding-left: 8px;
+    padding-right: 8px;
+    width: 98.5%;
+    height: 100px;
+    box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    font-size: 3rem;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    text-align: right;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 20px;
+    width: 100%;
+
+    button{
+      font-family: 'Orbitron', sans-serif;
+      border: none;
+      outline: none;
+      font-size: 2rem;
+      padding: 20px;
+      border-radius: 8px;
+      //background-color: #333;
+      //color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+
+      &:hover {
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+      }
+
+      &:focus {
+        box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.5);
+      }
+
+      transition: all 0.3s ease;
+    }
+  }
+
+  .calculate {
+    font-family: 'Orbitron', sans-serif;
+    border: none;
+    outline: none;
+    font-size: 2rem;
+    padding: 20px;
+    border-radius: 8px;
+    //background-color: #333;
+    //color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    &:hover {
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+    }
+    &:focus {
+      box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    }
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+}

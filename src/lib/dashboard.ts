@@ -18,7 +18,7 @@ export const getUser = cache(async () => {
     if (userId === undefined) throw new Error("User not found");
     const user = await db.user.findUnique({ where: { id: userId } });
     if (!user) throw new Error("User not found");
-    return { id: user.id, username: user.username };
+    return { id: user.id, username: user.username, settings: user.settings};
   } catch {
     await logoutSession();
     throw redirect("/login");
@@ -166,4 +166,18 @@ export const updateCharacterEvents = action(async (id: string, events: Character
   if (userId === undefined) throw new Error("User not found");
 
   return await db.character.update({ where: { id, userID: userId }, data: { events: events } });
+});
+
+export const updateUserSettings = action(async (formData: FormData) => {
+  "use server";
+
+  const session = await getSession();
+  const userId = session.data.userId;
+
+  if (userId === undefined) throw new Error("User not found");
+
+  let shouldSavePageData = formData.get("savePageData") === "on" ? true : false;
+  let darkmode = formData.get("darkmode") === "on" ? true : false;
+
+  return await db.user.update({ where: { id: userId }, data: { settings: { savePageData: shouldSavePageData, darkMode: darkmode } } });
 });

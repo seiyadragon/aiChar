@@ -1,6 +1,6 @@
 import { createAsync, redirect, Router, type RouteDefinition, action, useAction, useSubmission } from "@solidjs/router";
 import CustomTitle from "~/components/CustomTitle";
-import { createProfileImage, deleteCharacter, getProfileImages, getRandomUUID, getUser, logout, updateCharacterEvents, updateCharacterTraits } from "~/lib/dashboard";
+import { createProfileImage, deleteCharacter, getProfileImages, getRandomUUID, getUser, logout, updateCharacterEvents, updateCharacterTraits, updateUserSettings } from "~/lib/dashboard";
 
 import { FaSolidUserGroup } from 'solid-icons/fa'
 import { CgProfile } from 'solid-icons/cg'
@@ -15,6 +15,9 @@ import CharacterCard from "~/components/CharacterCard";
 
 import { Character, CharacterEvent, CharacterTrait } from "~/lib/types";
 import InteractiveArray from "~/components/InteractiveArray";
+import Calculator from "~/components/Calculator";
+
+import Darkmode from 'darkmode-js'
 
 // Simple notification type
 type Notification = {
@@ -95,13 +98,14 @@ export default function Dashboard() {
   // Refs for the character window image section
   let chooseFileRef: any;
   let imageInputRef: any;
+  let savePageDataCheckboxRef: any;
+  let darkmodeCheckboxRef: any;
 
   // Data save guard
   let pageDataLoaded = false
 
   onMount(() => {
     // Load the page data from local storage
-    
   })
 
   onCleanup(() => {
@@ -117,25 +121,31 @@ export default function Dashboard() {
       }))
     }
 
+    // We always save the page data to the localstorage in case the user reeanbles the setting
     savePageData()
+
+    if (savePageDataCheckboxRef)
+        savePageDataCheckboxRef.checked = user()?.settings?.savePageData ?? false
 
     // Will only run once after all the data for the page has been loaded
     if (user() && characters() && images() && !effectRunOnce()) {
       // Reset the notification message when the user logs in
       resetNotification()
-
       // Everything else here /////////////////////////////////////////////////
-
-      // Load the page data from local storage
-      loadPageData()
-
+      if (user()?.settings?.savePageData) {
+        // Load the page data from local storage only if the user has the setting enabled
+        loadPageData()
+      } else if (!user()?.settings?.savePageData) {
+        // If the user has the setting disabled, then set the dashboard page to the default page, otherwise it will be stuck loading
+        setDashboardPage(0)
+      }
       /////////////////////////////////////////////////////////////////////////
-
       // Set that this block of code has already run once and we do not want to run it again
       setEffectRunOnce(true)
     }
   })
 
+  // Function to generate a random UUID on the frontend
   function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
@@ -143,6 +153,7 @@ export default function Dashboard() {
     });
   }
 
+  // Save the page data to local storage
   function savePageData() {
     let pageData = {
       dashboardPage: dashboardPage() ?? "",
@@ -166,6 +177,7 @@ export default function Dashboard() {
     }
   }
 
+  // Load the page data from local storage
   function loadPageData() {
     if (typeof window !== 'undefined') {
       // Get the page data from local storage
@@ -801,16 +813,35 @@ export default function Dashboard() {
               </div>
             </Show>
             <Show when={dashboardPage() === 1}>
-              <h1>User</h1>
-              {/* USER DASHBOARD / ACCOUNT PROFILE */}
-              <h2>{user()?.username}</h2>
+              <div class={styles.title}>
+                <h1>Account</h1>
+                <p class={styles.notification} style={{ "color": notification().color }}>{notification().message}</p>
+              </div>
+              {/* ACCOUNT PROFILE */}
               <form action={logout} method="post">
-                <button name="logout" type="submit">Logout</button>
+                <button name="logout" type="submit" class={styles.logoutButton}>Logout</button>
               </form>
+              <fieldset>
+                <legend>Settings</legend>
+                <form action={updateUserSettings} class={styles.userSettingsForm} method="post">
+                  <div>
+                    <label for="savePageData">Save page data: </label>
+                    <input type="checkbox" name="savePageData" ref={savePageDataCheckboxRef}/>
+                  </div>
+                  <div>
+                    <label for="darkmode">Dark mode: </label>
+                    <input type="checkbox" name="darkmode" ref={darkmodeCheckboxRef} onInput={() => {
+                      new Darkmode().toggle()
+                    }}/>
+                  </div>
+                  <button type="submit">Save</button>
+                </form>
+              </fieldset>
             </Show>
             <Show when={dashboardPage() === 2}>
               <div class={styles.title}>
                 <h1>Calculator</h1>
+                <Calculator />
               </div>
             </Show>
           </div>

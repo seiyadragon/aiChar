@@ -14,6 +14,7 @@
     "@solidjs/router": "^0.12.4",
     "@solidjs/start": "^0.6.0",
     "@types/uuid": "^9.0.8",
+    "darkmode-js": "^1.5.7",
     "sass": "^1.71.1",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.15",

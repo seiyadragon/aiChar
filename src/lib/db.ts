@@ -3,7 +3,7 @@ import fsLiteDriver from "unstorage/drivers/fs-lite";
 
 import crypto from "crypto";
 
-import { User, Character, ProfileImage } from "./types";
+import { User, Character, ProfileImage, UserSettings } from "./types";
 
 const storage = createStorage({
   driver: fsLiteDriver({
@@ -31,7 +31,7 @@ export const db = {
   user: {
     async create({ data }: { data: { username: string; password: string } }) {
       const [{ value: users }, { value: index }] = await storage.getItems(["users:data", "users:counter"]);
-      let user = { ...data, id: genRandomID() };
+      let user = { ...data, id: genRandomID(), settings: { savePageData: false }};
 
       await Promise.all([
         storage.setItem("users:data", [...(users as User[]), user]),
@@ -54,6 +54,21 @@ export const db = {
         return users.find(user => user.id === id);
       } else {
         return users.find(user => user.username === username);
+      }
+    },
+    async update({ where: { id = undefined }, data }: { where: { id?: string }, data: Partial<User> }) {
+      let users = await storage.getItem("users:data") as User[];
+      let user = users.find(user => user.id === id);
+      while (!Array.isArray(users)) {
+        users = await storage.getItem("users:data") as User[];
+      }
+
+      if (user) {
+        Object.assign(user, data);
+
+        users.splice(users.findIndex(user => user.id === id), 1, user);
+
+        await storage.setItem("users:data", users);
       }
     }
   },

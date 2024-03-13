@@ -1,7 +1,13 @@
+export type UserSettings = {
+  savePageData: boolean;
+  darkMode: boolean;
+}
+
 export type User = {
   id: string;
   username: string;
   password: string;
+  settings: UserSettings;
 };
 
 export type CharacterTrait = {
